@@ -22,7 +22,7 @@ BLUE = (0, 0, 255)
 #backgroundcolor = (80,80,80)
 backgroundcolor = (DARK_GRAY)
 
-running = True
+
 
 def pollforquit():
     event = pygame.event.poll()
@@ -32,8 +32,10 @@ def pollforquit():
     pygame.time.wait(15)  # time in ms
 
 
+
 # Initial screen decorations
-window.fill(backgroundcolor)
+#window.fill(backgroundcolor)
+# See: https://www.pygame.org/docs/tut/tom/games2.html
 # Fill background
 background = pygame.Surface(window.get_size())
 background = background.convert()
@@ -52,6 +54,8 @@ pygame.display.flip()
 
 
 # Main Event Loop
+running = True
+
 while running:
     pollforquit();
     
