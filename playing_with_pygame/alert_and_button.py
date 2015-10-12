@@ -8,7 +8,7 @@ pygame.display.set_caption('Alerter with Snooze Button')
 
 
 # colors are specified using RGB or friendly names such as "white" or "grey"
-# see: http://cloford.com/resources/colours/namedcol.htm
+# see: https://drafts.csswg.org/css-color/
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
