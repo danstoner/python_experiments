@@ -10,7 +10,11 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.boxlayout import BoxLayout   # puts child widget in a row vertically or horizontally
 
+# Kivy Properties
+#from kivy.properties import ListProperty
+
 # import random
+
 
 class ScatterTextWidget(BoxLayout):
     # def change_label_colour(self, *args):
