@@ -1,12 +1,18 @@
 <testWidget>:
 	orientation: 'horizontal'
-	TextInput:
-		id: my_textinput
-		size_hint_y: None
-		text: 'Started...'
+	BoxLayout:
+		orientation: "vertical"
+		Label:
+			size_hint_y: 0.25
+			text: "RFID Reader Activity"
+		TextInput:
+			id: my_textinput
+			#size_hint_y: None
+			text: 'Waiting...'
+		
 	Button:
 		id: alarm_button
-		font_size: 100
+		font_size: 50
 		text: "Snooze"
 
 
