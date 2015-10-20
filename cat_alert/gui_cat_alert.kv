@@ -1,0 +1,27 @@
+<testWidget>:
+	orientation: 'horizontal'
+	BoxLayout:
+		orientation: "vertical"
+		Label:
+			id: my_status
+			text: 'No Alert'
+			color: root.alert_color()
+		Label:
+			size_hint_y: 0.25
+			text: "RFID Reader Activity"
+		TextInput:
+			id: my_textinput
+			multiline: False
+			write_tab: False
+			#size_hint_y: None
+			text: 'Waiting...'
+			on_text_validate: root.check_and_reset(my_textinput.text)
+		
+	Button:
+		id: alarm_button
+		font_size: 45
+		text: "Snooze"
+		on_press: root.snooze_alarm()
+
+
+	
