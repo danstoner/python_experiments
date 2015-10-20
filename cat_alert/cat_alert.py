@@ -1,9 +1,13 @@
 import os
 
-line = '''
+aline = '''
 *****************************************
 '''
 
+#
+# ascii art cat retrieved from http://user.xmission.com/~emailbox/ascii_cats.htm
+# and slightly modified to work inside a Python script.
+#
 acat = '''
                                  
       ,/|         _.--''^``-...___.._./;
@@ -16,31 +20,32 @@ acat = '''
 ************* CAT DETECTED! *************
 '''
 
-
 def alert ():
     alarming = True
     x = None
     while alarming:
         print acat
-        print line
+        print aline
         # bash command does two things:
-        #   first play an alert sound (/usr/share/sounds/purple/alert.wav from Ubuntu)
-        #   x receives the return code from the operating system "read" command, success = 0
-        x = os.system("""bash -c 'aplay -q alert.wav; read -s -t 1 -n 1 -p "Press ENTER to stop the alarm..."'""")
+        #   1. first play an alert sound
+        #   2. use the operating system (shell) "read" command, 
+        #      store the return code in variable x. 
+        #      A return code of 0 means input was detected.
+        x = os.system("""bash -c 'aplay -q sounds/alert.wav; read -s -t 1 -n 1 -p "Press ENTER to stop the alarm..."'""")
 
         print ""
         if x == 0: 
             alarming = False
             print "Alarm Stopped."
-            print line
-        print line
+            print aline
+        print aline
 
     
 
 
-print line
+print aline
 print "CAT DEFENSE SYSTEM INITIALIZED"
-print line
+print aline
 
 try:
     while True:
@@ -51,7 +56,7 @@ try:
             alert();
 except (KeyboardInterrupt, EOFError) as e:
     print ""
-    print line
+    print aline
     print "Stopping!"
     print ""
 
