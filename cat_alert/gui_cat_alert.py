@@ -11,6 +11,7 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
+from kivy.core.audio import SoundLoader
 
 
 class testWidget(BoxLayout):
@@ -20,6 +21,7 @@ class testWidget(BoxLayout):
     white = (224, 224, 224, 1)
     red = (255, 0, 0, 1)
     green = (0, 102, 0, 1)
+    alarm = SoundLoader.load('sounds/alert.wav')
 
     catcodes = ("123456","abcdefg")
 
@@ -52,6 +54,8 @@ class testWidget(BoxLayout):
     def sound_alarm(self):
         if self.alarming_now:
             print "ALARM!"
+            self.alarm.play()
+            
 
     def snooze_alarm(self):
         print "Snooze Button pressed."
