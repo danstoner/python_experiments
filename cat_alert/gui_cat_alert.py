@@ -61,9 +61,8 @@ class testWidget(BoxLayout):
         print "Snooze Button pressed."
         self.alarming_now = False
 
-
-
-    pass
+    def quit_app(self):
+        raise SystemExit
 
 class Gui_cat_alertApp(App):
     def build(self):

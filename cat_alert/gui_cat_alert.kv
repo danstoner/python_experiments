@@ -16,12 +16,19 @@
 			#size_hint_y: None
 			text: 'Waiting...'
 			on_text_validate: root.check_and_reset(my_textinput.text)
-		
-	Button:
-		id: alarm_button
-		font_size: 45
-		text: "Snooze"
-		on_press: root.snooze_alarm()
+	BoxLayout:
+		orientation: "vertical"
+		Button:
+			id: exit_button
+			size_hint_y: 0.15
+			font_size:20
+			text: "Close App"
+			on_press: root.quit_app()
+		Button:
+			id: alarm_button
+			font_size: 45
+			text: "Snooze"
+			on_press: root.snooze_alarm()
 
 
 	
