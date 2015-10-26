@@ -57,17 +57,22 @@ def pollforquit():
 
 def repeat_alarm(alarming):
     alarm_state = alarming
+    text = font.render("ALARMING!!!", 1, RED)
+    background.blit(text,textpos)
+    # put the process to sleep to share CPU and reduce resource consumption while idling
+
     while alarm_state:
         print "ALARM!"
-        event = pygame.event.poll()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                raise SystemExit
+            
         # stop alarm on click touch or keypress
-        if (event.type == pygame.MOUSEBUTTONDOWN) or (event.type == pygame.KEYDOWN):
-            alarm_state = False
-        if alarm_state:
-            text = font.render("ALARMING!!!", 1, RED)
-            background.blit(text,textpos)
-            # put the process to sleep to share CPU and reduce resource consumption while idling
-            pygame.time.wait(15)  # time in ms
+            if (event.type == pygame.MOUSEBUTTONDOWN) or (event.type == pygame.KEYDOWN):
+                alarm_state = False
+            if alarm_state:
+                pygame.time.wait(15)  # time in ms
     return alarm_state
 
 # Default application state
