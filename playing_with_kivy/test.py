@@ -2,6 +2,11 @@
 
 from kivy.app import App
 from kivy.config import Config
+
+import os
+os.environ["SDL_FBDEV"] = "/dev/fb1"
+
+
 # set app size for smaller screens
 Config.set('graphics', 'width', 320)
 Config.set('graphics', 'height', 240)
