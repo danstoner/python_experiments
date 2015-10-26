@@ -15,9 +15,8 @@ pygame.init()
 window = pygame.display.set_mode((300, 200))
 pygame.display.set_caption('Alerter with Snooze Button')
 
-
 # colors are specified using RGB or friendly names such as "white" or "grey"
-# see: https://drafts.csswg.org/css-color/
+# see: https://drafts.csswg.org/css-color/#named-colors
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -25,8 +24,8 @@ GRAY = (80, 80, 80)
 LIGHT_GRAY = (192, 192, 192)
 DARK_GRAY = (32, 32, 32)
 RED = (255, 0, 0)
-GREEN = (0, 255, 0)
-BLUE = (0, 0, 255)
+GREEN = (34, 139, 34)  # forestgreen
+BLUE = (30, 144, 255)  # dodgerblue
 
 backgroundcolor = (DARK_GRAY)
 
@@ -44,7 +43,6 @@ textpos = text.get_rect()
 textpos.centerx = background.get_rect().centerx
 background.blit(text, textpos)
 window.blit(background, (0, 0))
-
 pygame.display.flip()
 
 def pollforquit():
@@ -64,7 +62,7 @@ def repeat_alarm(alarming):
     window.blit(background, (0, 0))
 
 #    background.blit(text,textpos)
-    pygame.display.update()
+    pygame.display.flip()
 
     # put the process to sleep to share CPU and reduce resource consumption while idling
 
