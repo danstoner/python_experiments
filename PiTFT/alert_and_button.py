@@ -1,6 +1,6 @@
 import pygame
 import time
-
+import eztext
 import sys
 # SDL_FBDEV change is required for the Raspberry Pi PiTFT by AdaFruit
 import os
@@ -41,8 +41,14 @@ font = pygame.font.Font(None, 36)
 text = font.render("My Application Title", 1, BLUE)
 textpos = text.get_rect()
 textpos.centerx = background.get_rect().centerx
+
+txtbx=eztext.Input(maxlength=10, color=WHITE,y=3,prompt='Ready to Scan: ')
+txtbx.focus=True
+
 background.blit(text, textpos)
+txtbx.draw(window)
 window.blit(background, (0, 0))
+
 pygame.display.flip()
 
 def pollforquit():
@@ -55,10 +61,11 @@ def pollforquit():
 
 def repeat_alarm(alarming):
     alarm_state = alarming
-    text = font.render("ALARMING!!!", 1, RED)
-    textpos = text.get_rect()
-    textpos.centerx = background.get_rect().centerx
-    background.blit(text, textpos)
+    alarm_text = font.render("ALARMING!!!", 1, RED)
+    alarm_textpos = text.get_rect()
+    alarm_textpos.centerx = background.get_rect().centerx
+    alarm_textpos.centery = background.get_rect().centery
+    background.blit(alarm_text, alarm_textpos)
     window.blit(background, (0, 0))
 
 #    background.blit(text,textpos)
@@ -88,7 +95,19 @@ print "Started..."
 # Main Event Loop
 while running:
     if alarming:
+        
         alarming = repeat_alarm(alarming)
+    else:
+        alarm_text = font.render("READY", 1, GREEN)
+        alarm_textpos = alarm_text.get_rect()
+        alarm_textpos.centerx = background.get_rect().centerx
+        alarm_textpos.centery = background.get_rect().centery
+    background.blit(alarm_text, alarm_textpos)
+    window.blit(background, (0, 0))
+
+#    background.blit(text,textpos)
+    pygame.display.flip()
+
     # put the process to sleep to share CPU and reduce resource consumption while idling
     pygame.time.wait(15)  # time in ms
     if not debug:
