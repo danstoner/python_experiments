@@ -1,10 +1,15 @@
 import pygame
 import time
 
+import sys
 # SDL_FBDEV change is required for the Raspberry Pi PiTFT by AdaFruit
 import os
 os.environ["SDL_FBDEV"] = "/dev/fb1"
 
+debug = False
+if len(sys.argv) > 1:
+    if "debug" in sys.argv:
+        debug=True
 
 pygame.init()
 window = pygame.display.set_mode((300, 200))
@@ -23,19 +28,7 @@ RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 
-#backgroundcolor = (80,80,80)
 backgroundcolor = (DARK_GRAY)
-
-
-
-def pollforquit():
-    event = pygame.event.poll()
-    if event.type == pygame.QUIT:
-        raise SystemExit
-    # put the process to sleep to share CPU and reduce resource consumption while idling
-    pygame.time.wait(15)  # time in ms
-
-
 
 # Initial screen decorations
 #window.fill(backgroundcolor)
@@ -46,7 +39,7 @@ background = background.convert()
 background.fill(backgroundcolor)
 
 font = pygame.font.Font(None, 36)
-text = font.render("Stuff goes here", 1, BLUE)
+text = font.render("My Application Title", 1, BLUE)
 textpos = text.get_rect()
 textpos.centerx = background.get_rect().centerx
 background.blit(text, textpos)
@@ -54,14 +47,42 @@ window.blit(background, (0, 0))
 
 pygame.display.flip()
 
+def pollforquit():
+    event = pygame.event.poll()
+    if event.type == pygame.QUIT:
+        raise SystemExit
 
+## if not alarming, we want the text box to have focus and read lines of input from keyboard.
+## if alarming, we only want to listen for a click or touch event.
 
+def repeat_alarm(alarming):
+    alarm_state = alarming
+    while alarm_state:
+        print "ALARM!"
+        event = pygame.event.poll()
+        # stop alarm on click touch or keypress
+        if (event.type == pygame.MOUSEBUTTONDOWN) or (event.type == pygame.KEYDOWN):
+            alarm_state = False
+        if alarm_state:
+            text = font.render("ALARMING!!!", 1, RED)
+            background.blit(text,textpos)
+            # put the process to sleep to share CPU and reduce resource consumption while idling
+            pygame.time.wait(15)  # time in ms
+    return alarm_state
 
-# Main Event Loop
+# Default application state
 running = True
+alarming = True
 
+print "Started..."
+# Main Event Loop
 while running:
-    pollforquit();
+    if alarming:
+        alarming = repeat_alarm(alarming)
+    # put the process to sleep to share CPU and reduce resource consumption while idling
+    pygame.time.wait(15)  # time in ms
+    if not debug:
+        pollforquit();
     
 
 
