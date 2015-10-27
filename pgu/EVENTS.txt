@@ -1,3 +1,7 @@
+from: docs/pgu.engine.html
+see also file: docs/pgu.gui.const.html
+
+
 ACTIVEEVENT = 1
 ANYFORMAT = 268435456
 ASYNCBLIT = 4
