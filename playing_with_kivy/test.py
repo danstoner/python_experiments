@@ -2,6 +2,11 @@
 
 from kivy.app import App
 from kivy.config import Config
+
+import os
+os.environ["SDL_FBDEV"] = "/dev/fb1"
+
+
 # set app size for smaller screens
 Config.set('graphics', 'width', 320)
 Config.set('graphics', 'height', 240)
@@ -21,7 +26,14 @@ class testWidget(BoxLayout):
     red = (255, 0, 0, 1)
     green = (0, 102, 0, 1)
 
-    catcodes = ("123456","abcdefg")
+    catcodes = ("02225937",
+                "01435009",
+                "01907121",
+                "01661313",
+                "02026993"
+                )
+
+
 
     def alert_color(self):
         if self.alarming_now:

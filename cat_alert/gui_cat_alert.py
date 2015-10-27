@@ -1,5 +1,10 @@
 # test kivy app button and text input box
 
+# Run with debug option after -- to enable exit button and other debug capabilities
+#   python gui_cat_alert.py -- debug
+
+import sys
+
 from kivy.app import App
 from kivy.config import Config
 # set app size for smaller screens
@@ -13,6 +18,11 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.core.audio import SoundLoader
 
+# if len(sys.argv) > 1:
+#     arguments = sys.argv
+#     if "debug" in arguments:
+#         print "DEBUG mode enabled"
+#         debug = True
 
 class testWidget(BoxLayout):
     alarming_now = False
@@ -61,11 +71,11 @@ class testWidget(BoxLayout):
         print "Snooze Button pressed."
         self.alarming_now = False
 
-
-
-    pass
+    def quit_app(self):
+        raise SystemExit
 
 class Gui_cat_alertApp(App):
+
     def build(self):
         return testWidget()
 
