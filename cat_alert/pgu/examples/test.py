@@ -30,7 +30,7 @@ def checker():
 app = gui.Desktop()
 app.connect(gui.QUIT,app.quit,None)
 
-main = gui.Container(width=320, height=240, background=(240, 240, 240) )
+main = gui.Container(width=300, height=200, background=(240, 240, 240) )
 
 main.add(gui.Label("Example", cls="h1"), 20, 20)
 
