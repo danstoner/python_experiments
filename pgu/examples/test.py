@@ -6,6 +6,9 @@ sys.path.insert(0, '..')
 import pygame
 from pygame.locals import *
 from pgu import gui
+# SDL_FBDEV change is required for the Raspberry Pi PiTFT by AdaFruit
+import os
+os.environ["SDL_FBDEV"] = "/dev/fb1"
 
 
 # def open_file_browser(arg):
