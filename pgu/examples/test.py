@@ -37,6 +37,7 @@ td_style = {'padding_right': 10}
 t = gui.Table()
 t.tr()
 t.td( gui.Label('Ready to Scan:') , style=td_style )
+t.tr()
 input_string = gui.Input()
 t.td( input_string, style=td_style )
 #b = gui.Button("Browse...")
