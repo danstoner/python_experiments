@@ -23,6 +23,8 @@ os.environ["SDL_FBDEV"] = "/dev/fb1"
 def checker():
     print "checked"
 
+# def quitall():
+#     raise SystemExit
 
 #gui.theme.load('../data/themes/default')
 app = gui.Desktop()
@@ -32,8 +34,13 @@ main = gui.Container(width=300, height=200, background=(240, 240, 240) )
 
 main.add(gui.Label("Example", cls="h1"), 20, 20)
 
-
-td_style = {'padding_right': 10}
+e = gui.Button("Quit")
+e.connect(gui.CLICK,app.quit,None)
+top = gui.Table()
+top.tr()
+top.td(e)
+    
+td_style = {'padding_right': 1}
 t = gui.Table()
 t.tr()
 t.td( gui.Label('Ready to Scan:') , style=td_style )
@@ -45,7 +52,7 @@ t.td( input_string, style=td_style )
 #b.connect(gui.CLICK, open_file_browser, None)
 input_string.connect(gui.KEYDOWN,checker)
 
-
+main.add(top, 250, 180)
 main.add(t, 20, 100)
 #line = gui.Input(size=49)
 
