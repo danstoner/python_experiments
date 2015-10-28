@@ -21,9 +21,6 @@ os.environ["SDL_FBDEV"] = "/dev/fb1"
 
 
 
-
-
-
 def flytext(msg="hello world", duration=5):
     """blinking text bouncing around the screen"""
 
@@ -146,6 +143,7 @@ if __name__=="__main__":
     screen.blit(background,(0,0))
     pygame.display.flip()
     while running:
+        # TO DO: probably only need to do the fill once? pygame hung the PiTFT
         while alarming and running:
             background.fill(RED)
             background = background.convert()
