@@ -96,13 +96,18 @@ def scanloop():
 
 def alarmloop():
     print "alarmloop"
+    # put the process to sleep to share CPU and reduce resource consumption while idling
+    pygame.time.wait(15)  # time in ms
+    #event = pygame.event.poll()
+    #if event.type == pygame.MOUSEBUTTONDOWN:
+    #    return False
     # stop alarm on mouse button or Escape key
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONDOWN:
             return False
         else:
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
+                if event.key == pygame.K_RETURN:
                     return False
     return True
 
@@ -131,7 +136,7 @@ BLUE = (0, 0, 255)
 
 if __name__=="__main__":
     running = True
-    alarming = False
+    alarming = True
     scanning = True
     pygame.init()
     screen = pygame.display.set_mode((320,240))
@@ -141,10 +146,22 @@ if __name__=="__main__":
     screen.blit(background,(0,0))
     pygame.display.flip()
     while running:
+        while alarming and running:
+            background.fill(RED)
+            background = background.convert()
+            screen.blit(background,(0,0))
+            pygame.display.flip()
+
+            alarming = alarmloop()
+            #running = poll_for_quit()
+            # pygame.event.pump()
         while scanning and running:
+            background.fill(DARK_GRAY)
+            background = background.convert()
+            screen.blit(background,(0,0))
+            pygame.display.flip()
+
             scanning = scanloop()
             running = poll_for_quit()
-        while alarming and running:
-            alarming = alarmloop()
-            running = poll_for_quit()
+            # pygame.event.pump()
     raise SystemExit
