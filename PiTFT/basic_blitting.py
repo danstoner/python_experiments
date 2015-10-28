@@ -101,12 +101,12 @@ def alarmloop(screen,background):
     # stop alarm on mouse button or Escape key
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONDOWN:
-            change_to_scanning(background)
-            screen.blit(background,(0,0))
+            change_to_scanning(screen,background,"Ready to Scan...")
             return False
         else:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
+                    change_to_scanning(screen,background,"Ready to Scan...")
                     return False
     return True
 
@@ -121,14 +121,30 @@ def poll_for_quit():
                 return False
     return True
 
-def change_to_alerting(background):
+def change_to_alerting(screen,background,status):
     background.fill(RED)
     background = background.convert()
+    font = pygame.font.Font(None, 36)
+    text = font.render(status, 1, WHITE)
+    textpos = text.get_rect()
+    textpos.centerx = background.get_rect().centerx
+    textpos.centery = background.get_rect().centery
+    background.blit(text, textpos)
+    screen.blit(background,(0,30))
+    print "changed to alerting"
     
 
-def change_to_scanning(background):
+def change_to_scanning(screen,background,status):
     background.fill(DARK_GRAY)
     background = background.convert()
+    font = pygame.font.Font(None, 36)
+    text = font.render(status, 1, GREEN)
+    textpos = text.get_rect()
+    textpos.centerx = background.get_rect().centerx
+    textpos.centery = background.get_rect().centery
+    background.blit(text, textpos)
+    screen.blit(background,(0,30))
+    print "changed to scanning"
 
 # colors are specified using RGB or friendly names such as "white" or "grey"
 # see: https://drafts.csswg.org/css-color/
@@ -148,23 +164,26 @@ if __name__=="__main__":
     pygame.init()
     screen = pygame.display.set_mode((320,240))
     background = pygame.Surface(screen.get_size())
-    background.fill(DARK_GRAY)
+    background.fill(WHITE)
     background = background.convert()
+    screen.blit(background,(0,0)) # initial clear screen
+    # set the title
+    font = pygame.font.Font(None, 36)
+    text = font.render("My Application Title", 1, BLACK)
+    textpos = text.get_rect()
+    textpos.centerx = background.get_rect().centerx
+    background.blit(text, textpos)
     screen.blit(background,(0,0))
     pygame.display.flip()
-    change_to_alerting(background)
-    screen.blit(background,(0,0))
+    change_to_alerting(screen,background,"ALERT!!!")
     pygame.display.flip()
     while running:
         # TO DO: probably only need to do the fill once? pygame hung the PiTFT
         while alarming and running:
             alarming = alarmloop(screen,background)
             pygame.display.flip()
-            #running = poll_for_quit()
-            # pygame.event.pump()
         while scanning and running:
             scanning = scanloop(screen,background)
             running = poll_for_quit()
             pygame.display.flip()
-            # pygame.event.pump()
     raise SystemExit
