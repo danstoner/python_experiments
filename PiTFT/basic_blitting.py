@@ -83,7 +83,7 @@ def flytext(msg="hello world", duration=5):
     pygame.quit()
 
 
-def scanloop():
+def scanloop(screen,background):
     print "scanloop"
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
@@ -91,7 +91,7 @@ def scanloop():
                 return False
     return True
 
-def alarmloop():
+def alarmloop(screen,background):
     print "alarmloop"
     # put the process to sleep to share CPU and reduce resource consumption while idling
     pygame.time.wait(15)  # time in ms
@@ -101,6 +101,8 @@ def alarmloop():
     # stop alarm on mouse button or Escape key
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONDOWN:
+            change_to_scanning(background)
+            screen.blit(background,(0,0))
             return False
         else:
             if event.type == pygame.KEYDOWN:
@@ -119,6 +121,14 @@ def poll_for_quit():
                 return False
     return True
 
+def change_to_alerting(background):
+    background.fill(RED)
+    background = background.convert()
+    
+
+def change_to_scanning(background):
+    background.fill(DARK_GRAY)
+    background = background.convert()
 
 # colors are specified using RGB or friendly names such as "white" or "grey"
 # see: https://drafts.csswg.org/css-color/
@@ -142,24 +152,19 @@ if __name__=="__main__":
     background = background.convert()
     screen.blit(background,(0,0))
     pygame.display.flip()
+    change_to_alerting(background)
+    screen.blit(background,(0,0))
+    pygame.display.flip()
     while running:
         # TO DO: probably only need to do the fill once? pygame hung the PiTFT
         while alarming and running:
-            background.fill(RED)
-            background = background.convert()
-            screen.blit(background,(0,0))
+            alarming = alarmloop(screen,background)
             pygame.display.flip()
-
-            alarming = alarmloop()
             #running = poll_for_quit()
             # pygame.event.pump()
         while scanning and running:
-            background.fill(DARK_GRAY)
-            background = background.convert()
-            screen.blit(background,(0,0))
-            pygame.display.flip()
-
-            scanning = scanloop()
+            scanning = scanloop(screen,background)
             running = poll_for_quit()
+            pygame.display.flip()
             # pygame.event.pump()
     raise SystemExit
