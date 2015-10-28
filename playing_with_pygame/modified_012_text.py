@@ -14,6 +14,10 @@ works with pyhton3.4 and python2.7
 
 import pygame
 import random
+# SDL_FBDEV change is required for the Raspberry Pi PiTFT by AdaFruit
+import os
+os.environ["SDL_FBDEV"] = "/dev/fb1"
+
 
 def flytext(msg="hello world", duration=5):
     """blinking text bouncing around the screen"""
