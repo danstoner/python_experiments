@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
+Mods by Dan Stoner
+
+Original Example From.....
 012_text.py
 displaying and moving text
 url: http://thepythongamebook.com/en:part2:pygame:step012
@@ -52,6 +55,8 @@ def flytext(msg="hello world", duration=5):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 mainloop = False # pygame window closed by user
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mainloop = False # user clicked mouse or touched screen
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     mainloop = False # user pressed ESC
