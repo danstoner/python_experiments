@@ -84,15 +84,33 @@ def flytext(msg="hello world", duration=5):
 
 
 def scanloop(screen,background):
-    print "scanloop"
-    for event in pygame.event.get():
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_ESCAPE:
-                return False
+    print "** scanloop **"
+    looking_for_codes = True
+    read_a_line = False
+    code = ""
+
+    while looking_for_codes:
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    return False
+                if event.key == pygame.K_RETURN:
+                    read_a_line = True
+                if chr(event.key).isalnum():
+                    code += chr(event.key)
+                    print "debug - code ======= ", code
+        # by this point code should be a string triggered by return / enter.... e.g. equivalent to a readline
+        if read_a_line:
+            read_a_line = False
+            if code == "12345":
+                change_to_alerting(screen,background,"ALERT!!!")
+                pygame.display.flip()
+            return False
+
     return True
 
 def alarmloop(screen,background):
-    print "alarmloop"
+    print "** alarmloop **"
     # put the process to sleep to share CPU and reduce resource consumption while idling
     pygame.time.wait(15)  # time in ms
     #event = pygame.event.poll()
@@ -111,6 +129,7 @@ def alarmloop(screen,background):
     return True
 
 def poll_for_quit():
+    print "** poll_for_quit() **"
     # put the process to sleep to share CPU and reduce resource consumption while idling
     pygame.time.wait(15)  # time in ms
     for event in pygame.event.get():
@@ -122,6 +141,7 @@ def poll_for_quit():
     return True
 
 def change_to_alerting(screen,background,status):
+    print "** change_to_alerting() **"
     background.fill(RED)
     background = background.convert()
     font = pygame.font.Font(None, 36)
@@ -131,10 +151,11 @@ def change_to_alerting(screen,background,status):
     textpos.centery = background.get_rect().centery
     background.blit(text, textpos)
     screen.blit(background,(0,30))
-    print "changed to alerting"
+
     
 
 def change_to_scanning(screen,background,status):
+    print "** change_to_scanning() **"
     background.fill(DARK_GRAY)
     background = background.convert()
     font = pygame.font.Font(None, 36)
@@ -144,7 +165,7 @@ def change_to_scanning(screen,background,status):
     textpos.centery = background.get_rect().centery
     background.blit(text, textpos)
     screen.blit(background,(0,30))
-    print "changed to scanning"
+
 
 # colors are specified using RGB or friendly names such as "white" or "grey"
 # see: https://drafts.csswg.org/css-color/
@@ -158,10 +179,12 @@ GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 
 if __name__=="__main__":
+    # TO DO: probably only need to do the fill once? pygame hung the PiTFT
     running = True
     alarming = True
     scanning = True
     pygame.init()
+    #pygame.mouse.set_visible(False)
     screen = pygame.display.set_mode((320,240))
     background = pygame.Surface(screen.get_size())
     background.fill(WHITE)
@@ -178,12 +201,25 @@ if __name__=="__main__":
     change_to_alerting(screen,background,"ALERT!!!")
     pygame.display.flip()
     while running:
-        # TO DO: probably only need to do the fill once? pygame hung the PiTFT
+        print "** main running **"
         while alarming and running:
             alarming = alarmloop(screen,background)
             pygame.display.flip()
+#        letterstack = "" # reset the letter stack whenever we are outside the scanning loop
+        scanning = True
         while scanning and running:
+#            line = sys.stdin.readline()
+#           print "debug: ", line
+            # if (line == "quit") or (line == "exit"):
+            #     print "Quitting..."
+            #     raise SystemExit
+            # if line == "12345":
+            #     print "code found!"
+            #     scanning = False
+            #     alarming = True
+            #     change_to_alerting(screen,background,"ALERT!!!")
             scanning = scanloop(screen,background)
             running = poll_for_quit()
             pygame.display.flip()
+        alarming = True
     raise SystemExit
