@@ -1,0 +1,3 @@
+import pygame.examples.headless_no_windows_needed
+
+pygame.examples.headless_no_windows_needed.main('/home/dstoner/acis_lab_server_room_people.jpg',)
