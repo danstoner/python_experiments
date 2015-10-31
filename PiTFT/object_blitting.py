@@ -103,8 +103,15 @@ def change_to_scanning(screen,background,status):
     background.blit(text, textpos)
     screen.blit(background,INTERNAL_UPPER_LEFT_CORNER)
 
+# Constants to be used for RPi with TFT
+FPS = 15
+WIDTH = 320
+HEIGHT = 240
+WINDOW_SIZE = (WIDTH,HEIGHT)
+YOFFSET = 15
 
-# colors are specified using RGB or friendly names such as "white" or "grey"
+
+# colors are specified using RGB or friendly names such as "white" or "gray"
 # see: https://drafts.csswg.org/css-color/
 # COLOR = (Red, Green, Blue [,alpha])
 WHITE = (255, 255, 255)
@@ -116,17 +123,14 @@ RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 
-FPS = 15
 
-TITLE_TEXT = "Cat Defense System"
-SCANNING_TEXT = "Ready to Scan..."
-ALERT_TEXT = "ALERT!!!"
 
-WIDTH = 320
-HEIGHT = 240
-WINDOW_SIZE = (WIDTH,HEIGHT)
-YOFFSET = 30
-#INTERNAL_UPPER_LEFT_CORNER = (0,YOFFSET)
+# Customize
+TITLE_TEXT = "CDS"
+SCANNING_TEXT = "Waiting for..."
+ALERT_TEXT = "MONKEY!!!"
+
+CODES = ("12345", "abcde")
 
 class Status:
 
@@ -142,6 +146,11 @@ class Status:
         self.textcolor = WHITE
         self.backgroundcolor = RED
         self.statustext = ALERT_TEXT
+
+class Code:
+
+    def __init__ (self):
+        self.letters = ""
 
         
 def paint (surface, statusobject):
@@ -164,34 +173,30 @@ if __name__=="__main__":
     DisplaySurface.blit(title, titlepos)
 
     MyStatus = Status()
-    print MyStatus.statustext
-    MyStatus.statustext = SCANNING_TEXT
-    print MyStatus.statustext
+    MyCode = Code()
+    # print MyStatus.statustext
+    # MyStatus.statustext = SCANNING_TEXT
+    # print MyStatus.statustext
     MyStatus.change_to_Alarming()
     print MyStatus.statustext
-    MyStatus.change_to_Scanning()
-    print MyStatus.statustext
-    
+    paint(DisplaySurface,MyStatus)
+    # MyStatus.change_to_Scanning()
+    # print MyStatus.statustext
+    pygame.display.flip()
     while True:
-        MyStatus.change_to_Scanning()
-        paint(DisplaySurface,MyStatus)
-        pygame.display.flip()
+        
+#        MyStatus.change_to_Scanning()
+ 
+#        pygame.display.flip()
 
         # put the process to sleep to share CPU and reduce resource consumption while idling
         pygame.time.wait(1000)  # time in ms
 
-    # font = pygame.font.Font(None, 36)
-    # text = font.render(status, 1, WHITE)
-    # textpos = text.get_rect()
-    # textpos.centerx = background.get_rect().centerx
-    # textpos.centery = background.get_rect().centery
-    # background.blit(text, textpos)
-    # screen.blit(background, INTERNAL_UPPER_LEFT_CORNER)
 
 
-        MyStatus.change_to_Alarming()
-        paint(DisplaySurface,MyStatus)
-        pygame.display.flip()
+        # MyStatus.change_to_Alarming()
+        # paint(DisplaySurface,MyStatus)
+        # pygame.display.flip()
         # put the process to sleep to share CPU and reduce resource consumption while idling
         pygame.time.wait(1000)  # time in ms
 
