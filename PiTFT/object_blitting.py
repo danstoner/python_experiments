@@ -135,7 +135,7 @@ class Status:
 
     def change_to_Scanning (self):
         self.textcolor = GREEN
-        self.backgroundcolor = LIGHT_GRAY
+        self.backgroundcolor = DARK_GRAY
         self.statustext = SCANNING_TEXT
 
     def change_to_Alarming (self):
@@ -178,7 +178,7 @@ if __name__=="__main__":
         pygame.display.flip()
 
         # put the process to sleep to share CPU and reduce resource consumption while idling
-        pygame.time.wait(25)  # time in ms
+        pygame.time.wait(1000)  # time in ms
 
     # font = pygame.font.Font(None, 36)
     # text = font.render(status, 1, WHITE)
@@ -193,7 +193,7 @@ if __name__=="__main__":
         paint(DisplaySurface,MyStatus)
         pygame.display.flip()
         # put the process to sleep to share CPU and reduce resource consumption while idling
-        pygame.time.wait(25)  # time in ms
+        pygame.time.wait(1000)  # time in ms
 
         poll_for_quit()
         fpsClock.tick(FPS)
