@@ -106,7 +106,6 @@ def scanloop(screen,background):
                 change_to_alerting(screen,background,"ALERT!!!")
                 pygame.display.flip()
             return False
-
     return True
 
 def alarmloop(screen,background):
@@ -198,16 +197,22 @@ if __name__=="__main__":
     background.blit(text, textpos)
     screen.blit(background,(0,0))
     pygame.display.flip()
-    change_to_alerting(screen,background,"ALERT!!!")
-    pygame.display.flip()
     while running:
         print "** main running **"
-        while alarming and running:
-            alarming = alarmloop(screen,background)
+        if alarming:
+            change_to_alerting(screen,background,"ALERT!!!")
             pygame.display.flip()
+        while alarming and running:
+            print "** alarming and running **"
+            alarming = alarmloop(screen,background)
+#            pygame.display.flip()
 #        letterstack = "" # reset the letter stack whenever we are outside the scanning loop
+#        alarming = False
         scanning = True
+        change_to_scanning(screen,background,"Ready to Scan...")
+        pygame.display.flip()
         while scanning and running:
+            print "** scanning and running **"
 #            line = sys.stdin.readline()
 #           print "debug: ", line
             # if (line == "quit") or (line == "exit"):
@@ -219,7 +224,8 @@ if __name__=="__main__":
             #     alarming = True
             #     change_to_alerting(screen,background,"ALERT!!!")
             scanning = scanloop(screen,background)
-            running = poll_for_quit()
             pygame.display.flip()
+            running = poll_for_quit()
         alarming = True
+#        scanning = True
     raise SystemExit
