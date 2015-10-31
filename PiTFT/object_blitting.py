@@ -60,8 +60,8 @@ def quit_program():
     print "QUIT requested. Shutting down..."
     raise SystemExit
 
-def poll_for_quit():
-    print "** poll_for_quit() **"
+def poll(code):
+    print "** poll() **"
     # put the process to sleep to share CPU and reduce resource consumption while idling
     pygame.time.wait(15)  # time in ms
     for event in pygame.event.get():
@@ -69,12 +69,21 @@ def poll_for_quit():
         if event.type == pygame.QUIT:
             #return False
             quit_program()
-        elif  event.type == pygame.MOUSEBUTTONDOWN:
-            quit_program()
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 #return False
                 quit_program()
+            # elif 
+            # code.
+        # elif  event.type == pygame.MOUSEBUTTONDOWN:
+        #     quit_program()
+
+                # if event.key == pygame.K_RETURN:
+                #     read_a_line = True
+                # if chr(event.key).isalnum():
+                #     code += chr(event.key)
+                #     print "debug - code ======= ", code
+
     return True
 
 def change_to_alerting(screen,background,status):
@@ -141,11 +150,13 @@ class Status:
         self.textcolor = GREEN
         self.backgroundcolor = DARK_GRAY
         self.statustext = SCANNING_TEXT
+        self.status = "scanning"
 
     def change_to_Alarming (self):
         self.textcolor = WHITE
         self.backgroundcolor = RED
         self.statustext = ALERT_TEXT
+        self.status = "alarming"
 
 class Code:
 
@@ -183,8 +194,10 @@ if __name__=="__main__":
     # MyStatus.change_to_Scanning()
     # print MyStatus.statustext
     pygame.display.flip()
+
+    # Main Loop!
     while True:
-        
+         poll(MyCode)
 #        MyStatus.change_to_Scanning()
  
 #        pygame.display.flip()
