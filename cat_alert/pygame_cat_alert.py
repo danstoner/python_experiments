@@ -36,7 +36,7 @@ TITLE_TEXT = "CDS"
 SCANNING_TEXT = "Waiting for..."
 ALERT_TEXT = "MONKEY!!!"
 ALERT_SOUND = 'sounds/alert.wav'
-CODES = ("12345", "abcde")
+CODES = ("12345", "abcdef", "01661313")
 
 
 def quit_program():
