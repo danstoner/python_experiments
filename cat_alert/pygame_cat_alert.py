@@ -35,7 +35,7 @@ BLUE = (0, 0, 255)
 TITLE_TEXT = "CDS"
 SCANNING_TEXT = "Waiting for..."
 ALERT_TEXT = "MONKEY!!!"
-
+ALERT_SOUND = 'sounds/alert.wav'
 CODES = ("12345", "abcde")
 
 
@@ -142,14 +142,18 @@ if __name__=="__main__":
     print MyStatus.statustext
     paint(DisplaySurface,MyStatus)
     pygame.display.flip()
+    sound = pygame.mixer.Sound(ALERT_SOUND)
 
     # Main Loop!
     while True:
         poll(MyCode,MyStatus)
         paint(DisplaySurface,MyStatus)
         pygame.display.flip()
-        pygame.time.wait(50)  # time in ms
+        if MyStatus.status == 'alarming':
+            sound.play()
+            pygame.time.wait(1000)  # time in ms
+        else:
+            pygame.time.wait(50)  # time in ms
         fpsClock.tick(FPS)
-
     raise SystemExit
 
