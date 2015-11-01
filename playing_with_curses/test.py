@@ -54,6 +54,7 @@ try:
             screen.addstr(10,0,"Nope\n\n")
         #event = screen.getch()
         #if event == ord("q"): break
+        screen.refresh()
 except KeyboardInterrupt:
     pass
 
