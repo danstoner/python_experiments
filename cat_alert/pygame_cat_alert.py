@@ -5,12 +5,39 @@
 ##   -   Making games with Pygame by (Tom Chance?), 2003
 ##         https://www.pygame.org/docs/tut/tom/games6.html
 
-
-
 import pygame
 # SDL_FBDEV environment variable is required for the Raspberry Pi PiTFT by AdaFruit
 import os
 os.environ["SDL_FBDEV"] = "/dev/fb1"
+
+# Constants to be used for Raspberry Pi with PiTFT LCD touchscreen
+FPS = 15
+WIDTH = 320
+HEIGHT = 240
+WINDOW_SIZE = (WIDTH,HEIGHT)
+YOFFSET = 15
+
+# colors are specified using RGB
+# see: https://drafts.csswg.org/css-color/
+#
+# COLOR = (Red, Green, Blue [,alpha])
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+GRAY = (80, 80, 80)
+LIGHT_GRAY = (192, 192, 192)
+DARK_GRAY = (32, 32, 32)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+BLUE = (0, 0, 255)
+
+
+# Customize
+TITLE_TEXT = "CDS"
+SCANNING_TEXT = "Waiting for..."
+ALERT_TEXT = "MONKEY!!!"
+
+CODES = ("12345", "abcde")
+
 
 def quit_program():
     print "QUIT requested. Shutting down..."
@@ -49,35 +76,6 @@ def poll(code,status):
                     print "debug - code ======= ", code.word        
     return True
 
-
-# Constants to be used for RPi with TFT
-FPS = 15
-WIDTH = 320
-HEIGHT = 240
-WINDOW_SIZE = (WIDTH,HEIGHT)
-YOFFSET = 15
-
-
-# colors are specified using RGB or friendly names such as "white" or "gray"
-# see: https://drafts.csswg.org/css-color/
-# COLOR = (Red, Green, Blue [,alpha])
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
-GRAY = (80, 80, 80)
-LIGHT_GRAY = (192, 192, 192)
-DARK_GRAY = (32, 32, 32)
-RED = (255, 0, 0)
-GREEN = (0, 255, 0)
-BLUE = (0, 0, 255)
-
-
-
-# Customize
-TITLE_TEXT = "CDS"
-SCANNING_TEXT = "Waiting for..."
-ALERT_TEXT = "MONKEY!!!"
-
-CODES = ("12345", "abcde")
 
 class Status:
 
