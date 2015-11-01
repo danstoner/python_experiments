@@ -142,8 +142,9 @@ if __name__=="__main__":
     print MyStatus.statustext
     paint(DisplaySurface,MyStatus)
     pygame.display.flip()
+    pygame.mixer.pre_init(frequency=22050, size=-16, channels=1)
     sound = pygame.mixer.Sound(ALERT_SOUND)
-
+    
     # Main Loop!
     while True:
         poll(MyCode,MyStatus)
