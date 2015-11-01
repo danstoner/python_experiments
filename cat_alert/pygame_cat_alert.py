@@ -1,127 +1,66 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-"""
-From....
-012_text.py
-displaying and moving text
-url: http://thepythongamebook.com/en:part2:pygame:step012
-author: horst.jens@spielend-programmieren.at
-licence: gpl, see http://www.gnu.org/licenses/gpl.html
+##
+## Code patterns and snippets from:
+##   -   Making Games with Python and Pygame by Al Sweigart, 2012
+##         http://inventwithpython.com/pygame
+##   -   Making games with Pygame by (Tom Chance?), 2003
+##         https://www.pygame.org/docs/tut/tom/games6.html
 
-This program demonstrate how to render and blit text into a surface
 
-works with pyhton3.4 and python2.7
-"""
 
 import pygame
-# SDL_FBDEV change is required for the Raspberry Pi PiTFT by AdaFruit
+# SDL_FBDEV environment variable is required for the Raspberry Pi PiTFT by AdaFruit
 import os
 os.environ["SDL_FBDEV"] = "/dev/fb1"
 
+def quit_program():
+    print "QUIT requested. Shutting down..."
+    raise SystemExit
 
-
-
-def flytext(msg="hello world", duration=5):
-    """blinking text bouncing around the screen"""
-
-    def newcolour():
-        # any colour but black or white 
-        return (random.randint(10,250), random.randint(10,250), random.randint(10,250))
-
-    def write(msg="pygame is cool"):
-        myfont = pygame.font.SysFont("None", random.randint(20,40))
-        mytext = myfont.render(msg, True, newcolour())
-        mytext = mytext.convert_alpha()
-        return mytext
-        
-    pygame.init()
-    x = 60
-    y = 60
-    dx = 5
-    dy = 5
-
-    screen = pygame.display.set_mode((320,240))
-    background = pygame.Surface((screen.get_width(), screen.get_height()))
-    background.fill((255,255,255)) # white
-    background = background.convert()
-    screen.blit(background, (0,0)) # clean whole screen
-    clock = pygame.time.Clock()
-    mainloop = True
-    FPS = 15 # desired framerate in frames per second.
-    while mainloop:
-        milliseconds = clock.tick(FPS)  # milliseconds passed since last frame
-        seconds = milliseconds / 1000.0 # seconds passed since last frame
-        for event in pygame.event.get():
+def poll(code,status):
+    print "** poll() **"
+    # put the process to sleep to share CPU and reduce resource consumption while idling
+    pygame.time.wait(15)  # time in ms
+    for event in pygame.event.get():
+        if status.status == "alarming":
             if event.type == pygame.QUIT:
-                mainloop = False # pygame window closed by user
+                quit_program()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                code.reset()
+                status.change_to_Scanning()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    mainloop = False # user pressed ESC
-        textsurface = write("hello world")
-        #screen.blit(background, (0,0)) # clean whole screen
-        x += dx
-        y += dy
-        if x < 0:
-           x = 0
-           dx *= -1
-           screen.blit(background, (0,0)) # clean whole screen
-        elif x + textsurface.get_width() > screen.get_width():
-            x = screen.get_width() - textsurface.get_width()
-            dx *= -1
-        if y < 0:
-            y = 0
-            dy *= -1
-        elif y + textsurface.get_height() > screen.get_height():
-            y = screen.get_height() - textsurface.get_height()
-            dy *= -1
-            
-        screen.blit(textsurface, (x,y))
-        pygame.display.flip()
-        # put the process to sleep to share CPU and reduce resource consumption while idling
-        pygame.time.wait(15)  # time in ms
-
-    pygame.quit()
-
-
-def scanloop():
-    print "scanloop"
-    for event in pygame.event.get():
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_ESCAPE:
-                return False
-    return True
-
-def alarmloop():
-    print "alarmloop"
-    # put the process to sleep to share CPU and reduce resource consumption while idling
-    pygame.time.wait(15)  # time in ms
-    #event = pygame.event.poll()
-    #if event.type == pygame.MOUSEBUTTONDOWN:
-    #    return False
-    # stop alarm on mouse button or Escape key
-    for event in pygame.event.get():
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            return False
-        else:
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RETURN:
-                    return False
-    return True
-
-def poll_for_quit():
-    # put the process to sleep to share CPU and reduce resource consumption while idling
-    pygame.time.wait(15)  # time in ms
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            return False
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_ESCAPE:
-                return False
+                    code.reset()
+                    status.change_to_Scanning()
+        elif status.status == "scanning":
+            if event.type == pygame.QUIT:
+                quit_program()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    quit_program()
+                elif event.key == pygame.K_RETURN:
+                    code.found = code.check_code()
+                    if code.found:
+                        status.change_to_Alarming()
+                        code.reset()
+                    else:
+                        code.reset()
+                elif chr(event.key).isalnum():
+                    code.append(chr(event.key))
+                    print "debug - code ======= ", code.word        
     return True
 
 
-# colors are specified using RGB or friendly names such as "white" or "grey"
+# Constants to be used for RPi with TFT
+FPS = 15
+WIDTH = 320
+HEIGHT = 240
+WINDOW_SIZE = (WIDTH,HEIGHT)
+YOFFSET = 15
+
+
+# colors are specified using RGB or friendly names such as "white" or "gray"
 # see: https://drafts.csswg.org/css-color/
+# COLOR = (Red, Green, Blue [,alpha])
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 GRAY = (80, 80, 80)
@@ -131,35 +70,88 @@ RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 
+
+
+# Customize
+TITLE_TEXT = "CDS"
+SCANNING_TEXT = "Waiting for..."
+ALERT_TEXT = "MONKEY!!!"
+
+CODES = ("12345", "abcde")
+
+class Status:
+
+    def __init__ (self):
+        self.change_to_Alarming()
+
+    def change_to_Scanning (self):
+        self.textcolor = GREEN
+        self.backgroundcolor = DARK_GRAY
+        self.statustext = SCANNING_TEXT
+        self.status = "scanning"
+
+    def change_to_Alarming (self):
+        self.textcolor = WHITE
+        self.backgroundcolor = RED
+        self.statustext = ALERT_TEXT
+        self.status = "alarming"
+
+        
+class Code:
+
+    def __init__ (self):
+        self.reset()
+
+    def reset (self):
+        self.word = ""
+        self.found = False
+
+    def check_code (self):
+        if self.word in CODES:
+            self.found = True
+            return True
+        else:
+            self.found = False
+            return False
+
+    def append (self,letter):
+        self.word += letter
+
+        
+def paint (surface, statusobject):
+    newtext = font.render(statusobject.statustext, 1, statusobject.textcolor)
+    newtextpos = newtext.get_rect()
+    newtextpos.centerx = surface.get_rect().centerx
+    newtextpos.centery = surface.get_rect().centery
+    pygame.draw.rect(surface, statusobject.backgroundcolor, (0, YOFFSET, WIDTH, HEIGHT))
+    surface.blit(newtext, newtextpos)
+
 if __name__=="__main__":
-    running = True
-    alarming = True
-    scanning = True
     pygame.init()
-    screen = pygame.display.set_mode((320,240))
-    background = pygame.Surface(screen.get_size())
-    background.fill(DARK_GRAY)
-    background = background.convert()
-    screen.blit(background,(0,0))
+    fpsClock = pygame.time.Clock()
+    DisplaySurface = pygame.display.set_mode(WINDOW_SIZE)
+    DisplaySurface.fill(WHITE)
+    font = pygame.font.Font(None, 36)
+    title = font.render(TITLE_TEXT, 1, BLACK)
+    titlepos = title.get_rect()
+    titlepos.centerx = DisplaySurface.get_rect().centerx
+    DisplaySurface.blit(title, titlepos)
+
+    MyStatus = Status()
+    MyCode = Code()
+
+    MyStatus.change_to_Alarming()
+    print MyStatus.statustext
+    paint(DisplaySurface,MyStatus)
     pygame.display.flip()
-    while running:
-        # TO DO: probably only need to do the fill once? pygame hung the PiTFT
-        while alarming and running:
-            background.fill(RED)
-            background = background.convert()
-            screen.blit(background,(0,0))
-            pygame.display.flip()
 
-            alarming = alarmloop()
-            #running = poll_for_quit()
-            # pygame.event.pump()
-        while scanning and running:
-            background.fill(DARK_GRAY)
-            background = background.convert()
-            screen.blit(background,(0,0))
-            pygame.display.flip()
+    # Main Loop!
+    while True:
+        poll(MyCode,MyStatus)
+        paint(DisplaySurface,MyStatus)
+        pygame.display.flip()
+        pygame.time.wait(50)  # time in ms
+        fpsClock.tick(FPS)
 
-            scanning = scanloop()
-            running = poll_for_quit()
-            # pygame.event.pump()
     raise SystemExit
+
