@@ -3,8 +3,9 @@ import random
 from time import sleep
 import sys
 
-sym_ok = u'\u2714'
-sym_err = u'\u2718'
+sym_ok = u'\u2714'  # heavy check mark
+sym_err = u'\u2718'  # heavy ballot x (cross mark)
+sym_bullet = u'\u2022'  # bullet (dot)
 
 
 def get_random_status():
