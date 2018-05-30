@@ -3,6 +3,9 @@ import random
 from time import sleep
 import sys
 
+from terminal import red, green
+
+
 sym_ok = u'\u2714'  # heavy check mark
 sym_err = u'\u2718'  # heavy ballot x (cross mark)
 sym_bullet = u'\u2022'  # bullet (dot)
@@ -21,7 +24,7 @@ print("Begin!")
 for x in range (1,25):
     sys.stdout.flush()
     if get_random_status():
-        print(sym_ok, end="")
+        print(green(sym_ok), end="")
     else:
-        print(sym_err, end="")
+        print(red(sym_err), end="")
 
