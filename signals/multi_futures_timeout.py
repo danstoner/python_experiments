@@ -6,9 +6,6 @@ from concurrent import futures
 
 TIMEOUT = 5
 
-def print_something():
-    print("in the callback!")
-
 
 def task_Sleep(seconds):
     print ("Start sleeping for {0}s...".format(seconds))
