@@ -1,4 +1,4 @@
-# requires python3
+# requires python 3.6 or later (fstrings)
 
 from heapq import heappush, heappop, heappushpop
 import sys
